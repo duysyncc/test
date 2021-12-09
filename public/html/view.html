@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nếu đã lỡ sai lầm</title>
+</head>
+<style>
+    .inline {
+        /* display: flex; */
+    }
+
+    #iframe {
+        height: 100vh;
+        width: 90%;
+        border: 3px solid black;
+    }
+
+    #desktop {
+        width: 90%;
+        border: 3px solid black;
+    }
+</style>
+
+<body class="inline">
+    <iframe id="iframe" src="/cacheHtml/idListen" frameborder="0"></iframe>
+    <img id="desktop" src="https://laptopbathon.com/wp-content/uploads/2019/07/windows-10-ban-quyen-tu-microsoft.jpg">
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> -->
+
+<script>
+    window.onload = function () {
+        var socket = io.connect('');// clent khởi tạo kết nối socket đến server
+        let frameDoc = document.getElementById('iframe');
+        socket.on('roomHtml/idListen', function (data) { // lắng nghe event 'news' được server gửi đến
+            // console.log(data); // log data để kiểm tra
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(data);
+            iframe.contentWindow.document.close();
+        });
+
+
+        socket.on('roomDesktop/idListen', function (data) { // lắng nghe event 'news' được server gửi đến
+            // console.log(data); // log data để kiểm tra
+            document.getElementById("desktop").src = "data:image/png;base64," + data;
+        });
+
+        function printMousePos(event) {
+            console.log(event)
+            var width = document.getElementById("desktop").offsetWidth;
+            var height = document.getElementById("desktop").offsetHeight;
+
+            const endpoint = `/click/idListen/${width}/${height}/${event.offsetX}/${event.offsetY}`;
+            fetch(endpoint)
+                .then((response) => response.text())
+                .then((data) => {
+                    console.log(data)
+                });
+
+            console.log(`/click/idListen/${width}/${height}/${event.offsetX}/${event.offsetY}`)
+        }
+        document.getElementById("desktop").addEventListener("click", printMousePos);
+
+        // window.onclick = e => {
+        //     console.log(e.target);  // to get the element
+        //     console.log(e.target.tagName);  // to get the element tag name alone
+        // }
+    }
+
+</script>
+</html>

@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <style type="text/css">
+        video {
+            background-color: #ddd;
+            border-radius: 7px;
+            margin: 10px 0px 0px 10px;
+            width: 320px;
+            height: 240px;
+        }
+
+        button {
+            margin: 5px 0px 0px 10px !important;
+            width: 654px;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap" class="sexyButton">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
+    <script>
+
+        // Put event listeners into place
+        window.addEventListener("DOMContentLoaded", function () {
+            // Grab elements, create settings, etc.
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var video = document.getElementById('video');
+            var mediaConfig = {
+                video: {
+                    facingMode: "environment"
+                }
+            };
+            var errBack = function (e) {
+                console.log('An error has occurred!', e)
+            };
+
+            // Put video listeners into place
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia(mediaConfig).then(function (stream) {
+                    //video.src = window.URL.createObjectURL(stream);
+                    video.srcObject = stream;
+                    video.play();
+                });
+            }
+
+            /* Legacy code below! */
+            else if (navigator.getUserMedia) { // Standard
+                navigator.getUserMedia(mediaConfig, function (stream) {
+                    video.src = stream;
+                    video.play();
+                }, errBack);
+            } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+                navigator.webkitGetUserMedia(mediaConfig, function (stream) {
+                    video.src = window.webkitURL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            } else if (navigator.mozGetUserMedia) { // Mozilla-prefixed
+                navigator.mozGetUserMedia(mediaConfig, function (stream) {
+                    video.src = window.URL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+
+            // Trigger photo take
+            setInterval(function () {
+                context.drawImage(video, 0, 0, 640, 480);
+                var imgData = context.getImageData(0, 0, 640, 480);
+                var pixel = imgData.data;
+                // console.log(imgData)
+                // for (var i = 0; i < pixel.length; i += 4) {
+                //     // var avg = 1 * pixel[i] + 0.89 * pixel[i + 1] + 0.11 * pixel[i + 2];
+                //     pixel[i] = (pixel[i] >= 255) ? 255 : 0;
+                //     pixel[i + 1] = (pixel[i + 1] >= 255) ? 255 : 0;
+                //     pixel[i + 2] = (pixel[i + 2] >= 255) ? 255 : 0;
+                // }
+                  for (var i = 0; i < pixel.length; i += 4) {
+                    if (pixel[i] >= 255){
+                        y = (i/4)/640;
+                        x = (i/4 - y)/480;
+                        console.log("X: "+ x + "Y: "+y);
+                    }
+                }
+                for (var i = 0; i < 2560; i += 4) {
+                    imgData.data[i] = 255;
+                    imgData.data[i + 1] = 0;
+                    imgData.data[i + 2] = 0;
+                    imgData.data[i + 3] = 255;
+                }
+                context.putImageData(imgData, 0, 0);
+            }, 100)
+        }, false);
+
+    </script>
+</body>
+
+</html>

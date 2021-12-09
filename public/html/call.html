@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SICT</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+</head>
+
+<body onload="showMyFace()">
+    <div class="content">
+        <div class="content-videos">
+            <div class="call">
+                <button class="btn-call" onclick="showFriendsFace()" type="button"></button>
+            </div>
+            <div class="videocall">
+                <video id="friendsVideo" autoplay></video>
+            </div>
+            <div class="progress">
+                <div class="btn-prog">
+                    <button class="btn-c" onclick="cong()"></button>
+                </div>
+                <div class="myProgress" id="myProgress">
+                    <div class="myBar" id="myBar"></div>
+                </div>
+                <div class="btn-prog">
+                    <button class="btn-t" onclick="tru()"></button>
+                </div>
+            </div>
+            <div class="cam-cont">
+                <nav><b>ID:</b><div id="idVideocallRobot">5734543758348</div></nav>
+                
+                <div class="videocam">
+                    <video id="yourVideo" autoplay muted></video>
+                </div>
+                <div class="controll">
+                    <div class="up" id="up">
+                        <button class="btn-up"></button>
+                    </div>
+
+                    <div class="down" id="down">
+                        <button class="btn-down"></button>
+                    </div>
+                    <div class="left" id="left">
+                        <button class="btn-left"></button>
+                    </div>
+
+                    <div class="right" id="right">
+                        <button class="btn-right"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="./js/call.js"></script>
+    <script src="./js/rtcall.js"></script>
+
+</body>
+
+</html>
