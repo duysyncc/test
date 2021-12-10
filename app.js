@@ -47,6 +47,15 @@ app.get('/cacheDesktop/:id', (req, res) => {
   res.send(cacheDesktop[req.params.id]);
 })
 
+app.get('/key/:id', (req, res) => {
+  if (req.params.id == "68fhjr883758937uw") {
+    res.send("TRUE");
+  } else {
+    res.send("FALSE");
+  }
+
+})
+
 io.on('connection', function (socket) { //Bắt sự kiện một client kết nối đến server
   socket.on('all client', function (data) { //lắng nghe event 'all client'
     io.sockets.emit('news', data); // gửi cho tất cả client
